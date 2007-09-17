@@ -13,10 +13,12 @@
 %define api_version	2
 %define lib_major	0
 %define lib_name    %mklibname bonobo %{api_version} %{lib_major}
+#gw we must keep this, the other name is taken by a gnome 1.4 package
+%define develname %mklibname -d bonobo %{api_version} %lib_major
 
 Name:		libbonobo
 Summary:	Library for compound documents in GNOME
-Version: 2.19.6
+Version: 2.20.0
 Release:	%mkrel 1
 License:	LGPL
 URL:		http://www.gnome.org/
@@ -63,7 +65,7 @@ spreadsheet and graphic embedded in a word-processing document.
 This package provides libraries to use Bonobo.
 
 
-%package -n %{lib_name}-devel
+%package -n %develname
 Summary:	Static libraries, include files and sample code for Bonobo 2
 Group:		Development/GNOME and GTK+
 # Intentional, the name libbonobo2-devel was already used for bonobo 1.0.x
@@ -76,7 +78,7 @@ Provides:	libbonobo-activation-devel
 Requires:	libxml2-devel >= %{req_libxml_version}
 Requires:	libORBit2-devel >= %{req_ORBit_version}
 
-%description -n %{lib_name}-devel
+%description -n %develname
 Bonobo is a library that provides the necessary framework for GNOME
 applications to deal with compound documents, i.e. those with a
 spreadsheet and graphic embedded in a word-processing document.
@@ -141,9 +143,10 @@ rm -rf %{buildroot}
 
 %files -n %{lib_name}
 %defattr(-, root, root)
-%{_libdir}/*.so.*
+%{_libdir}/libbonobo-2.so.0*
+%_libdir/libbonobo-activation.so.4*
 
-%files -n %{lib_name}-devel
+%files -n %develname
 %defattr(-, root, root)
 %doc changes.txt TODO ChangeLog
 %doc %{_datadir}/gtk-doc/html/*
