@@ -100,10 +100,8 @@ it includes demonstration executables and codes as well.
 
 %make
 
+%check
 #make check
-
-# workaround for GNOME bug 112837
-killall -q lt-bonobo-activation-empty-server || exit 0
 
 %install
 rm -rf %{buildroot}
