@@ -23,6 +23,7 @@ Release:	%mkrel 1
 License:	LGPL
 URL:		http://www.gnome.org/
 Group:		Graphical desktop/GNOME
+BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 
 Source0:	ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
 
