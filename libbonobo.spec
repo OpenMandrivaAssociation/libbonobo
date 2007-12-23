@@ -18,7 +18,7 @@
 
 Name:		libbonobo
 Summary:	Library for compound documents in GNOME
-Version: 2.20.2
+Version: 2.20.3
 Release:	%mkrel 1
 License:	LGPL
 URL:		http://www.gnome.org/
