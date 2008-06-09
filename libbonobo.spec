@@ -118,9 +118,13 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/bonobo/monikers/*.{a,la} \
 %clean
 rm -rf %{buildroot}
 
+%if %mdkversion < 200900
 %post -n %{lib_name} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %postun -n %{lib_name} -p /sbin/ldconfig
+%endif
 
 %files -f %{name}-2.0.lang
 %defattr(-, root, root)
