@@ -31,7 +31,8 @@ BuildRequires: bison
 BuildRequires: flex
 BuildRequires: libORBit2-devel >= %{req_ORBit_version}
 BuildRequires: libxml2-devel >= %{req_libxml_version}
-BuildRequires: perl-XML-Parser
+BuildRequires: dbus-glib-devel
+BuildRequires: intltool
 BuildRequires: automake1.9
 %if %enable_gtkdoc
 BuildRequires:	gtk-doc >= 0.9
