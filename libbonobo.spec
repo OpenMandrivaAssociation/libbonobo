@@ -34,6 +34,7 @@ BuildRequires: libxml2-devel >= %{req_libxml_version}
 BuildRequires: dbus-glib-devel
 BuildRequires: intltool
 BuildRequires: automake1.9
+BuildRequires: popt-devel
 %if %enable_gtkdoc
 BuildRequires:	gtk-doc >= 0.9
 %endif
