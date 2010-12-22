@@ -19,7 +19,7 @@
 Name:		libbonobo
 Summary:	Library for compound documents in GNOME
 Version: 2.32.0
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	GPLv2+ and LGPLv2+
 URL:		http://www.gnome.org/
 Group:		System/Libraries
@@ -33,7 +33,7 @@ BuildRequires: libORBit2-devel >= %{req_ORBit_version}
 BuildRequires: libxml2-devel >= %{req_libxml_version}
 BuildRequires: dbus-glib-devel
 BuildRequires: intltool
-BuildRequires: automake1.9
+BuildRequires: automake
 BuildRequires: popt-devel
 %if %enable_gtkdoc
 BuildRequires:	gtk-doc >= 0.9
@@ -75,8 +75,9 @@ Provides:	%{name}%{api_version}_x-devel = %{version}-%{release}
 Requires:	%{lib_name} = %{version}
 Requires:	%{name} = %{version}
 Obsoletes:  libbonobo-activation4-devel
-Provides:	libbonobo-activation4-devel
-Provides:	libbonobo-activation-devel
+Provides:	libbonobo-activation4-devel = %{version}-%{release}
+Provides:	libbonobo-activation-devel = %{version}-%{release}
+Requires:	popt-devel
 Requires:	libxml2-devel >= %{req_libxml_version}
 Requires:	libORBit2-devel >= %{req_ORBit_version}
 
@@ -94,7 +95,6 @@ it includes demonstration executables and codes as well.
 %setup -q
 
 %build
-
 %configure2_5x \
 %if %enable_gtkdoc
 --enable-gtk-doc
