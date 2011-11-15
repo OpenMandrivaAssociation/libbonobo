@@ -1,46 +1,43 @@
 # enable_gtkdoc: toggle if gtk-doc stuff should be rebuilt.
 #	0 = no
 #	1 = yes
-%define enable_gtkdoc	1
+%define	enable_gtkdoc	1
 
 # End of user configurable section
-%{?_without_gtkdoc: %{expand: %%define enable_gtkdoc 0}}
-%{?_with_gtkdoc: %{expand: %%define enable_gtkdoc 1}}
-
-%define req_ORBit_version	2.9.2
-%define req_libxml_version	2.4.20
+%{?_without_gtkdoc: %{expand: %%define	enable_gtkdoc 0}}
+%{?_with_gtkdoc: %{expand: %%define	enable_gtkdoc 1}}
 
 %define api_version	2
 %define lib_major	0
-%define lib_name    %mklibname bonobo %{api_version} %{lib_major}
-#gw we must keep this, the other name is taken by a gnome 1.4 package
-%define develname %mklibname -d bonobo %{api_version} %lib_major
+%define lib_name	%mklibname bonobo %{api_version} %{lib_major}
+%define	develname	%mklibname -d bonobo
 
 Name:		libbonobo
 Summary:	Library for compound documents in GNOME
-Version: 2.32.1
-Release:	%mkrel 2
+Version:	2.32.1
+Release:	3
 License:	GPLv2+ and LGPLv2+
-URL:		http://www.gnome.org/
 Group:		System/Libraries
-BuildRoot:	%{_tmppath}/%{name}-%{version}-root
-
+URL:		http://www.gnome.org/
 Source0:	ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
 
+BuildRequires: automake
 BuildRequires: bison 
 BuildRequires: flex
-BuildRequires: libORBit2-devel >= %{req_ORBit_version}
-BuildRequires: libxml2-devel >= %{req_libxml_version}
-BuildRequires: dbus-glib-devel
-BuildRequires: intltool
-BuildRequires: automake
-BuildRequires: popt-devel
 %if %enable_gtkdoc
-BuildRequires:	gtk-doc >= 0.9
+BuildRequires: gtk-doc >= 0.9
 %endif
-Requires:	%{lib_name} = %{version}
-Obsoletes: bonobo-activation
-Provides: bonobo-activation
+BuildRequires: intltool
+BuildRequires: pkgconfig(gio-2.0) >= 2.25.7
+BuildRequires: pkgconfig(glib-2.0) >= 2.25.7
+BuildRequires: pkgconfig(gmodule-2.0) >= 2.0.1
+BuildRequires: pkgconfig(gobject-2.0) >= 2.25.7
+BuildRequires: pkgconfig(gthread-2.0) >= 2.25.7
+BuildRequires: pkgconfig(libxml-2.0) >= 2.4.20
+BuildRequires: pkgconfig(ORBit-2.0) >= 2.11.2
+BuildRequires: pkgconfig(ORBit-CosNaming-2.0) >= 2.11.2
+BuildRequires: pkgconfig(popt)
+Requires:	%{lib_name} = %{version}-%{release}
 
 %description
 Bonobo is a library that provides the necessary framework for GNOME
@@ -54,10 +51,6 @@ to operate.
 %package -n %{lib_name}
 Summary:	Library for compound documents in GNOME
 Group:		%{group}
-Requires:	%{name} >= %{version}
-Obsoletes:  libbonobo-activation4
-Provides:	libbonobo-activation4
-Provides:	libbonobo-activation
 
 %description -n %{lib_name}
 Bonobo is a library that provides the necessary framework for GNOME
@@ -67,21 +60,14 @@ spreadsheet and graphic embedded in a word-processing document.
 This package provides libraries to use Bonobo.
 
 
-%package -n %develname
-Summary:	Static libraries, include files and sample code for Bonobo 2
+%package -n %{develname}
+Summary:	Development libraries, include files and sample code for Bonobo 2
 Group:		Development/GNOME and GTK+
-# Intentional, the name libbonobo2-devel was already used for bonobo 1.0.x
-Provides:	%{name}%{api_version}_x-devel = %{version}-%{release}
-Requires:	%{lib_name} = %{version}
-Requires:	%{name} = %{version}
-Obsoletes:  libbonobo-activation4-devel
-Provides:	libbonobo-activation4-devel = %{version}-%{release}
-Provides:	libbonobo-activation-devel = %{version}-%{release}
-Requires:	popt-devel
-Requires:	libxml2-devel >= %{req_libxml_version}
-Requires:	libORBit2-devel >= %{req_ORBit_version}
+Requires:	%{lib_name} = %{version}-%{release}
+Provides:	%{name}-devel = %{version}-%{release}
+Obsoletes:	%{mklibname -d bonobo %{api_version} %lib_major}
 
-%description -n %develname
+%description -n %{develname}
 Bonobo is a library that provides the necessary framework for GNOME
 applications to deal with compound documents, i.e. those with a
 spreadsheet and graphic embedded in a word-processing document.
@@ -94,10 +80,15 @@ it includes demonstration executables and codes as well.
 %prep
 %setup -q
 
+# this is a hack for glib2.0 >= 2.31.0
+sed -i -e 's/-DG_DISABLE_DEPRECATED//g' \
+    ./activation-server/Makefile.*
+
 %build
 %configure2_5x \
+	--disable-static \
 %if %enable_gtkdoc
---enable-gtk-doc
+	--enable-gtk-doc
 %endif
 
 %make
@@ -112,52 +103,34 @@ rm -rf %{buildroot}
 %{find_lang} %{name}-2.0
 
 # remove unpackaged files
-rm -f $RPM_BUILD_ROOT%{_libdir}/bonobo/monikers/*.{a,la} \
-  $RPM_BUILD_ROOT%{_libdir}/orbit-2.0/*.{a,la} \
-  $RPM_BUILD_ROOT%{_bindir}/bonobo-activation-{run-query,empty-server} \
-  $RPM_BUILD_ROOT%{_libdir}/bonobo/servers/{empty,broken,plugin}.server
+find %{buildroot} -name *.la | xargs rm
+rm -f %{buildroot}%{_libdir}/bonobo/servers/{empty,broken,plugin}.server
 
-%clean
-rm -rf %{buildroot}
-
-%if %mdkversion < 200900
-%post -n %{lib_name} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{lib_name} -p /sbin/ldconfig
-%endif
 
 %files -f %{name}-2.0.lang
-%defattr(-, root, root)
 %doc README NEWS AUTHORS
 %config(noreplace) %{_sysconfdir}/bonobo-activation
 %{_bindir}/*
 %{_sbindir}/*
-%{_libdir}/bonobo-activation-server
-%{_datadir}/idl/*
+%{_libexecdir}/bonobo-activation-server
 %dir %{_libdir}/bonobo
 %dir %{_libdir}/bonobo/monikers
-%{_libdir}/bonobo/monikers/*.so*
 %dir %{_libdir}/bonobo/servers
+%{_libdir}/bonobo/monikers/*.so
 %{_libdir}/bonobo/servers/*
 %{_libdir}/bonobo-2.0
-%{_libdir}/orbit-2.0/*.so*
+%{_libdir}/orbit-2.0/*.so
 %{_mandir}/man1/*
 
 %files -n %{lib_name}
-%defattr(-, root, root)
-%{_libdir}/libbonobo-2.so.0*
-%_libdir/libbonobo-activation.so.4*
+%{_libdir}/libbonobo-2.so.%{lib_major}*
+%{_libdir}/libbonobo-activation.so.4*
 
-%files -n %develname
-%defattr(-, root, root)
+%files -n %{develname}
 %doc changes.txt TODO ChangeLog
 %doc %{_datadir}/gtk-doc/html/*
 %{_includedir}/*
 %{_libdir}/libbonobo*.so
-%{_libdir}/libbonobo*.a
-%attr(644,root,root) %{_libdir}/libbonobo*.la
 %{_libdir}/pkgconfig/*
-
+%{_datadir}/idl/*
 
