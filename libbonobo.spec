@@ -1,3 +1,5 @@
+%define url_ver %(echo %{version}|cut -d. -f1,2)
+
 %define	enable_gtkdoc	1
 %define api	2
 %define major	0
@@ -13,7 +15,7 @@ Release:	5
 License:	GPLv2+ and LGPLv2+
 Group:		System/Libraries
 Url:		http://www.gnome.org/
-Source0:	ftp://ftp.gnome.org/pub/GNOME/sources/%{name}/%{name}-%{version}.tar.bz2
+Source0:	ftp://ftp.gnome.org/pub/GNOME/sources/libbonobo/%{url_ver}/%{name}-%{version}.tar.bz2
 
 BuildRequires:	bison
 BuildRequires:	flex
@@ -43,7 +45,7 @@ to operate.
 Summary:	Library for compound documents in GNOME
 Group:		%{group}
 
-%description -n %{libact}
+%description -n %{libname}
 This package provides a library for Bonobo.
 
 %package -n %{libact}
@@ -51,7 +53,7 @@ Summary:	Library for compound documents in GNOME
 Group:		%{group}
 Conflicts:	%{_lib}bonobo2_0 < 2.32.1-5
 
-%description -n %{libname}
+%description -n %{libact}
 This package provides a library for Bonobo.
 
 %package -n %{devname}
@@ -87,7 +89,6 @@ sed -i -e 's/-DG_DISABLE_DEPRECATED//g' \
 
 %install
 %makeinstall_std
-
 %find_lang %{name}-2.0
 
 rm -f %{buildroot}%{_libdir}/bonobo/servers/{empty,broken,plugin}.server
