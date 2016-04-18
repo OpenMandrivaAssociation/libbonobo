@@ -1,4 +1,5 @@
 %define url_ver %(echo %{version}|cut -d. -f1,2)
+%define _disable_lto 1
 
 %define	enable_gtkdoc	1
 %define api	2
@@ -11,7 +12,7 @@
 Summary:	Library for compound documents in GNOME
 Name:		libbonobo
 Version:	2.32.1
-Release:	14
+Release:	15
 License:	GPLv2+ and LGPLv2+
 Group:		System/Libraries
 Url:		http://www.gnome.org/
