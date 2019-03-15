@@ -1,7 +1,7 @@
 %define url_ver %(echo %{version}|cut -d. -f1,2)
 %define _disable_lto 1
 
-%define	enable_gtkdoc	1
+%define	enable_gtkdoc	0
 %define api	2
 %define major	0
 %define actmaj	4
@@ -77,19 +77,19 @@ sed -i -e 's/-DG_DISABLE_DEPRECATED//g' \
     ./activation-server/Makefile.*
 
 %build
-%configure2_5x \
+%configure \
 	--disable-static \
 %if %enable_gtkdoc
 	--enable-gtk-doc
 %endif
 
-%make
+%make_build
 
 %check
 #make check
 
 %install
-%makeinstall_std
+%make_install
 %find_lang %{name}-2.0
 
 rm -f %{buildroot}%{_libdir}/bonobo/servers/{empty,broken,plugin}.server
