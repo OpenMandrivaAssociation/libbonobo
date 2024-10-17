@@ -15,7 +15,7 @@ Version:	2.32.1
 Release:	16
 License:	GPLv2+ and LGPLv2+
 Group:		System/Libraries
-Url:		http://www.gnome.org/
+Url:		https://www.gnome.org/
 Source0:	ftp://ftp.gnome.org/pub/GNOME/sources/libbonobo/%{url_ver}/%{name}-%{version}.tar.bz2
 
 BuildRequires:	bison
