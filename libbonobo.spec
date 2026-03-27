@@ -12,7 +12,7 @@
 Summary:	Library for compound documents in GNOME
 Name:		libbonobo
 Version:	2.32.1
-Release:	16
+Release:	17
 License:	GPLv2+ and LGPLv2+
 Group:		System/Libraries
 Url:		https://www.gnome.org/
