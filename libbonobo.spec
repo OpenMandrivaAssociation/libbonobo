@@ -91,7 +91,8 @@ export LDFLAGS="%{build_ldflags} -no-pie"
 	--enable-gtk-doc
 %endif
 
-%make_build
+# orbit-idl-2 races when several jobs create the same .deps directory.
+%make_build -j1
 
 %check
 #make check
