@@ -82,6 +82,9 @@ sed -i -e 's/-DG_DISABLE_DEPRECATED//g' \
     ./activation-server/Makefile.*
 
 %build
+# ORBit ships libname-server-2 as a non-PIC static archive. A PIE link
+# rejects its R_X86_64_32 relocations.
+export LDFLAGS="%{build_ldflags} -no-pie"
 %configure \
 	--disable-static \
 %if %enable_gtkdoc
@@ -103,7 +106,6 @@ rm -f %{buildroot}%{_libdir}/bonobo/servers/{empty,broken,plugin}.server
 %doc README NEWS AUTHORS
 %config(noreplace) %{_sysconfdir}/bonobo-activation
 %{_bindir}/*
-%{_sbindir}/*
 %{_libexecdir}/bonobo-activation-server
 %dir %{_libdir}/bonobo
 %dir %{_libdir}/bonobo/monikers
